@@ -259,7 +259,7 @@ class CinemaLocation extends React.Component{
         return(
                 <Wrap>
                     <Question>
-                        <div className="title">想知道離你最近的影城嗎？</div>
+                        <div className="title">城嗎？</div>
                         <div className="button" onClick={this.getCurrentLocation}>Click Me!</div>
                     </Question>
                    <Result>
