@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
 import React from 'react';
 import styled from 'styled-components';
+import loading from './loading.gif'
+
+/*global google*/
 
 const Wrap = styled.div`
     width: 100%;
@@ -101,29 +103,32 @@ class CinemaLocation extends React.Component{
 
         document.body.appendChild(script);
     }
+
     //你目前位置
     getCurrentLocation() {
-        this.setState({
-            isLoading:true
-        });
-        console.log("=======>拿到位置");
-		let self = this;	
-		navigator.geolocation.getCurrentPosition(function(position) {	
-            console.log("position",position);
-			let updatedLocation = {
-				lat: position.coords.latitude,
-				lng: position.coords.longitude
-            } 
-           
-            self.setState({
-                peopleLocation: updatedLocation
-            });
-			self.distancebetweenCinema(updatedLocation.lat, updatedLocation.lng);		
-		})
+      console.log("=======>拿到位置");
+
+      this.setState({
+          isLoading:true
+      });
+      let self = this;	
+      navigator.geolocation.getCurrentPosition(function(position) {	
+              console.log("position",position);
+        let updatedLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+              } 
+            
+              self.setState({
+                  peopleLocation: updatedLocation
+              });
+        self.distancebetweenCinema(updatedLocation.lat, updatedLocation.lng);		
+      })
     }
 
     //計算和3個影城的直線距離
     distancebetweenCinema(lat, lng){
+        console.log("=======>計算距離");
         let distanceResult=[];
 
         this.state.cinemaList.forEach(((item,index)=>{
@@ -155,6 +160,7 @@ class CinemaLocation extends React.Component{
     }
     // 比較哪個結果最近
     compareDistance(){
+        console.log("=======>比較");
         let result = this.state.distanceDate;
        
         if(result[0]>result[1]){
@@ -215,7 +221,7 @@ class CinemaLocation extends React.Component{
         
 
         let targetDestination =  new google.maps.LatLng(destinationLatitude, destinationLongitude);
-        if (this.state.currentPosition != '' && targetDestination != '') {
+        if (this.state.currentPosition !== '' && targetDestination !== '') {
 
             let request = {
                 origin: this.state.currentPosition,
@@ -226,7 +232,7 @@ class CinemaLocation extends React.Component{
             };
 
             directionsService.route(request, function(response, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
+                if (status === google.maps.DirectionsStatus.OK) {
                     directionsDisplay.setPanel(document.getElementsByClassName("directions")[0]);
                     directionsDisplay.setDirections(response);
                 }
@@ -259,7 +265,7 @@ class CinemaLocation extends React.Component{
                    <Result>
                        {this.state.isLoading?
                          <div className="loadingBox">
-                            loading...
+                            loading...<img src={loading} style={{width: "20px"}}/>
                         </div>
                         :
                         <div>
